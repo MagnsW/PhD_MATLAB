@@ -1,0 +1,2 @@
+[sensor_data_nx64_vc6464_grad_lateral, vc_6464] = lamb_simulate_velchange_grad_lateral(64, 64/64);
+[sensor_data_nx64_vc6464_grad_lateral_flip, vc_6464] = lamb_simulate_velchange_grad_lateral(64, 64/64);
