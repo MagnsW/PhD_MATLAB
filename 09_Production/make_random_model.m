@@ -7,7 +7,7 @@ rng(seed);
 r = randi([0 1],x_size,y_size);
 r(maxdepth+1:end,:) = 1;
 r(:,1:10) = 1;
-r(:,end-10:10
+r(:,end-10:end) = 1;
 for idx = 2:x_size
     for idy = 1:y_size
         if r(idx-1, idy) == 1

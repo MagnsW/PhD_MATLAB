@@ -1,4 +1,4 @@
-function [sensor_data, medium] = lamb_simulate(Nx_thickness, velcoeff, platemodel)
+function [sensor_data, medium, dt, dx, dy] = lamb_simulate(Nx_thickness, velcoeff, platemodel)
 %LAMB_SIMULATE_VELCHANGE Summary of this function goes here
 %   Detailed explanation goes here
 % ====================================================================
@@ -8,7 +8,7 @@ function [sensor_data, medium] = lamb_simulate(Nx_thickness, velcoeff, platemode
 
 %PML size (perfectly matched layer)
 PML_X_size = 10; % [gridpoints]
-PML_Y_size = 40; % [gridpoints]
+PML_Y_size = 80; % [gridpoints]
 PML_size = [PML_X_size, PML_Y_size];
 
 Nx = 100; % number of grid points in the x direction
@@ -77,7 +77,7 @@ medium.alpha_coeff_shear =0;% 0.5; % [dB/(MHz^2 cm)]
 %t_end = 12.7e-6;
 %t_end = 1e-6; %(MW)
 %t_end = 130e-6;
-t_end = 200e-6;
+t_end = 150e-6;
 dt = 10e-9;
 kgrid.setTime(int32(t_end/dt), dt);
 %kgrid.makeTime(max(medium.sound_speed_compression(:)), cfl, t_end);
@@ -86,10 +86,10 @@ kgrid.setTime(int32(t_end/dt), dt);
 
 % define source mask to be a square  piston
 source_x_pos = 11; % [grid points]
-source_radius = 25; % [grid points]
+source_radius = 24; % [grid points]
 source.u_mask = zeros(Nx, Ny);
 %source.u_mask(source_x_pos, Ny/2 - source_radius:Ny/2 + source_radius) = 1;
-source.u_mask(source_x_pos, 40 - source_radius:40 + source_radius) = 1; % MW - shift source to one side
+source.u_mask(source_x_pos, 105 - source_radius:105 + source_radius) = 1; % MW - shift source to one side
 % define source to be a velocity source
 source_freq = 5e4 ; % [Hz]
 %source_freq = freq;

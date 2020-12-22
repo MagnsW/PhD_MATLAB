@@ -1,17 +1,14 @@
-function [p_align_sensor_data, ux_align_sensor_data, p_timeshifts, ux_timeshifts, v_p, v_ux] = velestim_ph(sensor_data, dy, dt)
+function [p_time_sensor_data, ux_time_sensor_data, p_align_sensor_data, ...
+    ux_align_sensor_data, p_timeshifts, ux_timeshifts, v_p, v_ux] = velestim_ph(sensor_data, dy, dt)
 %VELESTIM Summary of this function goes here
 %   Detailed explanation goes here
 % In this version, the time shifts are returned instead of the aligned data
 
-display('Velestim started');
-p_sensor_data = squeeze(sensor_data.p)';
-ux_sensor_data = squeeze(sensor_data.ux(1,61:end,:))';
-
 p_time_sensor_data = s_convert(sensor_data.p', 0, dt);
 ux_time_sensor_data = s_convert(sensor_data.ux', 0, dt);
 
-p_align_sensor_data = s_align(p_time_sensor_data, {'adapt', 'yes', 'maxshift', 1e-50});
-ux_align_sensor_data = s_align(ux_time_sensor_data, {'adapt', 'yes', 'maxshift', 1e-9});
+p_align_sensor_data = s_align(p_time_sensor_data, {'adapt', 'yes'}, {'maxshift', 1e-5});
+ux_align_sensor_data = s_align(ux_time_sensor_data, {'adapt', 'yes'}, {'maxshift', 1e-5});
 
 [ymax, ~] = size(sensor_data.ux);
 y = 1:1:ymax;
@@ -24,6 +21,7 @@ plot(p_timeshifts)
 hold on
 plot(ux_timeshifts)
 hold off
+title('phase vels')
 
 p_coefficients = polyfit(y, p_align_sensor_data.headers(2,:), 1);
 ux_coefficients = polyfit(y, ux_align_sensor_data.headers(2,:), 1);
