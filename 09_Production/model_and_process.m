@@ -1,8 +1,8 @@
-function [data_full, data_decim] = model_and_process(Nx, pittingdepth, seed)
+function [data_full, data_decim] = model_and_process(Nx, pittingdepth, seed, velcoeff)
 %MODEL_AND_PROCESS Summary of this function goes here
 %   Detailed explanation goes here
 disp('----------Simulation start----------');
-velcoeff = 1;
+% velcoeff = 1;
 [data_full.sensor_data, data_full.model, data_full.sensor_data.dt, data_full.model.dx, ...
     data_full.model.dy] = lamb_simulate(Nx, velcoeff, make_random_model(Nx, 1280, pittingdepth, seed));
 [data_full.model.stats.thickness, data_full.model.stats.pVel, data_full.model.stats.sVel] = ...

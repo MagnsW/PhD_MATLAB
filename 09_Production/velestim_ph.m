@@ -16,12 +16,12 @@ y = y.*dy;
 
 p_timeshifts = p_align_sensor_data.headers(2,:);
 ux_timeshifts = ux_align_sensor_data.headers(2,:);
-figure
-plot(p_timeshifts)
-hold on
-plot(ux_timeshifts)
-hold off
-title('phase vels')
+% figure
+% plot(p_timeshifts)
+% hold on
+% plot(ux_timeshifts)
+% hold off
+% title('phase vels')
 
 p_coefficients = polyfit(y, p_align_sensor_data.headers(2,:), 1);
 ux_coefficients = polyfit(y, ux_align_sensor_data.headers(2,:), 1);
