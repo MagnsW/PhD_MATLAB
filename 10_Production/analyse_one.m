@@ -37,6 +37,7 @@ result.data_decim.sensor_data.t_array = 0:result.data_decim.sensor_data.dt:(leng
 disp('----------Compute displacement--------------');
 %compute displacement
 result.data_decim.sensor_data.ux_displacement = cumtrapz(result.data_decim.sensor_data.t_array, result.data_decim.sensor_data.ux');
+%result.data_decim.sensor_data.ux_displacement = cumtrapz(result.data_decim.sensor_data.t_array, result.data_decim.sensor_data.ux, 2);
 
 result.model = data_full.model;
 result.data_decim.trace_separation = data_full.model.dy*result.data_decim.incrementn;
@@ -57,9 +58,14 @@ disp('----------Group velocity estimation---------')
     result.velinfo.timeshifts.p_gr, result.velinfo.timeshifts.ux_gr, ...
     result.velinfo.p_vgr, result.velinfo.ux_vgr] = ...
     velestim_gr(result.data_decim.sensor_data, result.model.dy, result.data_decim.sensor_data.dt);
+
+disp('---------Displacement time data-------------')
+result.s_sensor_data_time.ux_displacement = s_convert(result.data_decim.sensor_data.ux_displacement, 0, result.data_decim.sensor_data.dt);
+
 disp('----------Wavelet analysis and 1D FT--------')
 [result.s_sensor_data_time.p, result.s_sensor_data_time.p.kurtosis]= wavelet_analysis(result.s_sensor_data_time.p);
 [result.s_sensor_data_time.ux, result.s_sensor_data_time.ux.kurtosis]= wavelet_analysis(result.s_sensor_data_time.ux);
+[result.s_sensor_data_time.ux_displacement, result.s_sensor_data_time.ux_displacement.kurtosis]= wavelet_analysis(result.s_sensor_data_time.ux_displacement);
 disp('----------AVO-------------------------------')
 
 disp('----------1DFT------------------------------')
@@ -67,12 +73,15 @@ disp('------------resampling----------------------')
 Fs = 1e-6; % new sampling frequency
 result.s_sensor_data_time_resampled.p = s_resample(result.s_sensor_data_time.p, Fs);
 result.s_sensor_data_time_resampled.ux = s_resample(result.s_sensor_data_time.ux, Fs);
+result.s_sensor_data_time_resampled.ux_displacement = s_resample(result.s_sensor_data_time.ux_displacement, Fs);
+
 [result.sensor_data_ft.p, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.p);
 [result.sensor_data_ft.ux, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.ux);
+[result.sensor_data_ft.ux_displacement, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.ux_displacement);
 
-
-
-
-
+disp('----------2DFT------------------------------')
+[result.fft.fft_p, result.fft.fftdb_p, result.fft.k, result.fft.f] = twodft(result.s_sensor_data_time_resampled.p, result.data_decim.trace_separation);
+[result.fft.fft_ux, result.fft.fftdb_ux, result.fft.k, result.fft.f] = twodft(result.s_sensor_data_time_resampled.ux, result.data_decim.trace_separation);
+[result.fft.fft_ux_displacement, result.fft.fftdb_ux_displacement, result.fft.k, result.fft.f] = twodft(result.s_sensor_data_time_resampled.ux_displacement, result.data_decim.trace_separation);
 end
 
