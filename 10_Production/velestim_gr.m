@@ -1,4 +1,4 @@
-function [p_align_sensor_data, ux_align_sensor_data, p_timeshifts, ux_timeshifts, v_p, v_ux] = velestim_gr(sensor_data, dy, dt)
+function [p_align_sensor_data, ux_align_sensor_data, H_p_time, H_ux_time, p_align_H, ux_align_H, p_timeshifts, ux_timeshifts, v_p, v_ux] = velestim_gr(sensor_data, dy, dt)
 %VELESTIM Summary of this function goes here
 %   Detailed explanation goes here
 p_sensor_data = squeeze(sensor_data.p)';
