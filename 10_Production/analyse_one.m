@@ -24,7 +24,8 @@ if isfield(data_full, 'input_param') % if input parameters field is populated in
 end
 
 result.data_decim.startn = 100;
-result.data_decim.finishn = 1120;
+%result.data_decim.finishn = 1120;
+result.data_decim.finishn = 750; %First 13 traces
 result.data_decim.incrementn = 50;
 result.data_decim.transradn = 24;
 
@@ -50,14 +51,14 @@ disp('----------Phase velocity estimation---------')
     result.s_sensor_data_aligned_vph.p, result.s_sensor_data_aligned_vph.ux, ...
     result.velinfo.timeshifts.p_ph, result.velinfo.timeshifts.ux_ph, ...
     result.velinfo.p_vph, result.velinfo.ux_vph] = ...
-    velestim_ph(result.data_decim.sensor_data, result.model.dy, result.data_decim.sensor_data.dt);
+    velestim_ph(result.data_decim.sensor_data, result.data_decim.trace_separation, result.data_decim.sensor_data.dt);
 
 disp('----------Group velocity estimation---------')
 [result.s_sensor_data_aligned_vgr.p, result.s_sensor_data_aligned_vgr.ux, ...
     result.s_hilbert.p, result.s_hilbert.ux, result.s_hilbert_aligned.p, result.s_hilbert_aligned.ux, ...
     result.velinfo.timeshifts.p_gr, result.velinfo.timeshifts.ux_gr, ...
     result.velinfo.p_vgr, result.velinfo.ux_vgr] = ...
-    velestim_gr(result.data_decim.sensor_data, result.model.dy, result.data_decim.sensor_data.dt);
+    velestim_gr(result.data_decim.sensor_data, result.data_decim.trace_separation, result.data_decim.sensor_data.dt);
 
 disp('---------Displacement time data-------------')
 result.s_sensor_data_time.ux_displacement = s_convert(result.data_decim.sensor_data.ux_displacement, 0, result.data_decim.sensor_data.dt);

@@ -7,8 +7,8 @@ function [p_time_sensor_data, ux_time_sensor_data, p_align_sensor_data, ...
 p_time_sensor_data = s_convert(sensor_data.p', 0, dt);
 ux_time_sensor_data = s_convert(sensor_data.ux', 0, dt);
 
-p_align_sensor_data = s_align(p_time_sensor_data, {'adapt', 'yes'}, {'maxshift', 1e-5});
-ux_align_sensor_data = s_align(ux_time_sensor_data, {'adapt', 'yes'}, {'maxshift', 1e-5});
+p_align_sensor_data = s_align(p_time_sensor_data, {'adapt', 'yes'}, {'maxshift', 7e-6});
+ux_align_sensor_data = s_align(ux_time_sensor_data, {'adapt', 'yes'}, {'maxshift', 7e-6});
 
 [ymax, ~] = size(sensor_data.ux);
 y = 1:1:ymax;
