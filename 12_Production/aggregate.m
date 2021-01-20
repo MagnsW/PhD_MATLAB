@@ -9,6 +9,7 @@ agg.velocities.ux_vph = zeros(numel(fn),1);
 agg.velocities.ux_vgr = zeros(numel(fn),1);
 %agg.amplitudes = zeros(numel(fn), 1);
 headerfields = data_decim.(fn{1}).s_sensor_data_time.ux.header_info(:,1);
+headerfields_H = data_decim.(fn{1}).s_hilbert.ux.header_info(:,1);
 for k=1:numel(fn)
     %disp(fn{k});
     %agg.vel_ratio = data_decim.(fn{k}).velinfo.ux_vph / data_decim.(fn{k}).velinfo.ux_vgr;
@@ -19,10 +20,18 @@ for k=1:numel(fn)
     agg.velocities.ux_vph(k) = data_decim.(fn{k}).velinfo.ux_vph;
     agg.velocities.ux_vgr(k) = data_decim.(fn{k}).velinfo.ux_vgr;
     for i=1:numel(headerfields)
-        agg.amplitudes.(headerfields{i})(k,:) = data_decim.(fn{k}).s_sensor_data_time.ux.headers(i, :);
+        vals = data_decim.(fn{k}).s_sensor_data_time.ux.headers(i, :);
+        agg.amplitudes.lin.(headerfields{i})(k,:) = vals;
+        agg.amplitudes.db.(headerfields{i})(k,:) = 20*log10(abs(vals)/max(abs(vals)));
     end
     agg.analysis.kurtosis(k,:) = data_decim.(fn{k}).s_sensor_data_time.ux.kurtosis;
-%     agg.amplitudes(k) = data_decim.(fn{k}).s_sensor_data_time.ux.headers;
+    
+    for i=1:numel(headerfields_H)
+        vals = data_decim.(fn{k}).s_hilbert.ux.headers(i, :);
+        agg.amplitudes_H.lin.(headerfields_H{i})(k,:) = vals;
+        agg.amplitudes_H.db.(headerfields_H{i})(k,:) = 20*log10(abs(vals)/max(abs(vals)));
+    end
+
 end
 
 

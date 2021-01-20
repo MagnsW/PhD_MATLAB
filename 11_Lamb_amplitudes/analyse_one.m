@@ -23,11 +23,18 @@ if isfield(data_full, 'input_param') % if input parameters field is populated in
     disp('input params found in dataset')
 end
 
-result.data_decim.startn = 100;
-%result.data_decim.finishn = 1120;
-result.data_decim.finishn = 750; %First 13 traces
+% result.data_decim.startn = 100;
+result.data_decim.startn = 25;
+result.data_decim.finishn = 1120;
+% result.data_decim.finishn = 750; %First 13 traces
 result.data_decim.incrementn = 50;
 result.data_decim.transradn = 24;
+
+% result.data_decim.startn = 1;
+% result.data_decim.finishn = 1120;
+% %result.data_decim.finishn = 750; %First 13 traces
+% result.data_decim.incrementn = 1;
+% result.data_decim.transradn = 24;
 
 
 disp('----------Decimation start------------------');
@@ -64,10 +71,16 @@ disp('----------Group velocity estimation---------')
 disp('---------Displacement time data-------------')
 result.s_sensor_data_time.ux_displacement = s_convert(result.data_decim.sensor_data.ux_displacement, 0, result.data_decim.sensor_data.dt);
 
-disp('----------Wavelet analysis and 1D FT--------')
+disp('----------Wavelet analysis --------')
 [result.s_sensor_data_time.p, result.s_sensor_data_time.p.kurtosis]= wavelet_analysis(result.s_sensor_data_time.p);
 [result.s_sensor_data_time.ux, result.s_sensor_data_time.ux.kurtosis]= wavelet_analysis(result.s_sensor_data_time.ux);
 [result.s_sensor_data_time.ux_displacement, result.s_sensor_data_time.ux_displacement.kurtosis]= wavelet_analysis(result.s_sensor_data_time.ux_displacement);
+
+[result.s_hilbert.p, result.s_hilbert.p.kurtosis]= wavelet_analysis(result.s_hilbert.p);
+[result.s_hilbert.ux, result.s_hilbert.ux.kurtosis]= wavelet_analysis(result.s_hilbert.ux);
+
+%commment from here if no decimation
+
 disp('----------AVO-------------------------------')
 
 disp('----------1DFT------------------------------')
@@ -77,9 +90,9 @@ result.s_sensor_data_time_resampled.p = s_resample(result.s_sensor_data_time.p, 
 result.s_sensor_data_time_resampled.ux = s_resample(result.s_sensor_data_time.ux, Fs);
 result.s_sensor_data_time_resampled.ux_displacement = s_resample(result.s_sensor_data_time.ux_displacement, Fs);
 
-[result.sensor_data_ft.p, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.p);
-[result.sensor_data_ft.ux, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.ux);
-[result.sensor_data_ft.ux_displacement, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.ux_displacement);
+[result.sensor_data_ft.p, result.sensor_data_ft.p_db, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.p);
+[result.sensor_data_ft.ux, result.sensor_data_ft.ux_db, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.ux);
+[result.sensor_data_ft.ux_displacement, result.sensor_data_ft.ux_displacement_db, result.sensor_data_ft.f] = onedft(result.s_sensor_data_time_resampled.ux_displacement);
 
 disp('----------2DFT------------------------------')
 [result.fft.fft_p, result.fft.fftdb_p, result.fft.k, result.fft.f] = twodft(result.s_sensor_data_time_resampled.p, result.data_decim.trace_separation);
