@@ -255,4 +255,5 @@ set( gca, 'FontSize', 12);
 colormap( gray)
 caxis([-dyn 0]-gain);
 axis equal tight
+colorbar
 end
