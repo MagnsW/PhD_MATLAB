@@ -13,7 +13,7 @@ deltaY = 0.3/pixY;
 xfreqs = linspace(-0.5, 0.5, Nfftx+1)*(1/deltaX); xfreqs(end) = [];
 yfreqs = linspace(-0.5, 0.5, Nffty+1)*(1/deltaY); yfreqs(end) = [];
 
-figure('Position', [10 10 1210 810])
+figure('Position', [10 10 1210 610])
 subplot(1,2,1)
 image(lena)
 axis('image')
@@ -23,12 +23,16 @@ subplot(1,2,2)
 lena_fft = fft2(lena, Nfftx, Nffty);
 imagesc(xfreqs, yfreqs, 20*log10(fftshift(abs(lena_fft))));
 axis('image')
+dyn = 100;
+gain = -120;
+caxis([-dyn 0]-gain);
+colorbar;
 %%
-Nx = 55;
-Ny = 55;
+Nx = 5;
+Ny = 5;
 avgfilt = ones(Nx, Ny)/(Nx*Ny);
 
-figure('Position', [10 10 1210 810])
+figure('Position', [10 10 1210 610])
 
 subplot(1,2,1)
 imagesc(avgfilt)
@@ -41,10 +45,11 @@ colormap(gray(255))
 axis('image')
 dyn = 50;
 gain = 0;
-caxis([-dyn 0]-gain)
+caxis([-dyn 0]-gain);
+colorbar;
 
 %%
-figure('Position', [10 10 1210 810])
+figure('Position', [10 10 1210 610])
 
 lena_filt = filter2(avgfilt, lena);
 
@@ -59,4 +64,8 @@ subplot(1,2,2)
 imagesc(xfreqs, yfreqs, 20*log10(fftshift(abs(lena_filt_fft))));
 colormap(gray(255))
 axis('image')
+dyn = 100;
+gain = -120;
+caxis([-dyn 0]-gain);
+colorbar;
 

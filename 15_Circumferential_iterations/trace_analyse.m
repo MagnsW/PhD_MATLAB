@@ -41,15 +41,15 @@ output.cropped_max_env = crop_signal(output.envelope, max_locs - max_locs(1) + 1
 %Phase round time = Group round time + phase delay.
 
 %computing phase delays:
-output.phase_correction = struct_corr(output.cropped_max_signal, 1);
+output.phase_correction = struct_corr(output.cropped_max_signal, 1, dt);
 
-output.time_group = output.env_max.pks_locs_time;
-output.time_phase = output.env_max.pks_locs_time + output.phase_correction.timediff*dt;
-
-output.round_time_group = diff(output.time_group);
-output.round_time_phase = diff(output.time_phase);
-
-output.propag_vel_group = circumference ./ output.round_time_group; 
-output.propag_vel_phase = circumference ./ output.round_time_phase;
+% output.time_group = output.env_max.pks_locs_time;
+% output.time_phase = output.env_max.pks_locs_time + output.phase_correction.timediff*dt;
+% 
+% output.round_time_group = diff(output.time_group);
+% output.round_time_phase = diff(output.time_phase);
+% 
+% output.propag_vel_group = circumference ./ output.round_time_group; 
+% output.propag_vel_phase = circumference ./ output.round_time_phase;
 end
 

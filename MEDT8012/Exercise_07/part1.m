@@ -1,20 +1,21 @@
 %%
 clear all;
-% lines = imread('Horizontal2.bmp');
+lines = imread('Horizontal2.bmp');
 % lines = imread('Vertical_low_left.bmp');
 % lines = imread('Vertical_up_right.bmp');
 % lines = imread('Rotate45.bmp');
-lines = imread('Hor_thin.bmp');
+% lines = imread('Hor_thin.bmp');
 % lines = imread('Hor_thick.bmp');
 % lines = imread('Hor_thick_short.bmp');
 
 lines = imcomplement(lines); % negative image to get white lines on black
 
-figure('Position', [10 10 2010 610])
+figure('Position', [10 10 1410 510])
 subplot(1,2,1)
 imagesc(lines)
 colormap(gray(255));
 axis('image');
+title('Image');
 
 subplot(1,2,2)
 Nfft = 512;
@@ -34,3 +35,4 @@ dyn = 50;
 gain = -75;
 caxis([-dyn 0]-gain)
 axis('image')
+title('2D Fourier Transform')

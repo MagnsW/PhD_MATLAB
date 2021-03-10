@@ -33,7 +33,7 @@ end
 
 %% The simulation itself and saving
 fn = fieldnames(data_circ);
-for k=83:100 %numel(fn)
+for k=83:120 %numel(fn)
     disp([num2str(k) '-dataset name: ' data_circ.(fn{k}).input_param.datasetname]);
     [data_circ.(fn{k}).sensor_data, data_circ.(fn{k}).medium, data_circ.(fn{k}).dt, data_circ.(fn{k}).dx, data_circ.(fn{k}).dy] = lamb_simulate(data_circ.(fn{k}).input_param.thickness, data_circ.(fn{k}).input_param.velcoeff, data_circ.(fn{k}).model);
     disp('Simulation done');
@@ -56,7 +56,7 @@ for k=83:100 %numel(fn)
 end
 
 %%
-data_circ = load('data_circumferential.mat')
+data_circ = load('data_circumferential.mat');
 %% Post processing
 fn = fieldnames(data_circ);
 for j=1:numel(fn)
