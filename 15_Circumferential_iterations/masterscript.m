@@ -3,6 +3,9 @@ FileName = 'data_circumferential.mat';
 FileNameBackup = 'X:\Magnus\PhD\Matlab_data\15_Circumferential_iterations\data_circumferential.mat';
 circ_nodes = 1280;
 
+%%
+data_circ = load('data_circumferential.mat');
+
 %% creating the struct
 for thickness = 64:-1:61 
     for velcoeff=0.98:0.01:1.02
@@ -33,7 +36,7 @@ end
 
 %% The simulation itself and saving
 fn = fieldnames(data_circ);
-for k=83:120 %numel(fn)
+for k=166:numel(fn)
     disp([num2str(k) '-dataset name: ' data_circ.(fn{k}).input_param.datasetname]);
     [data_circ.(fn{k}).sensor_data, data_circ.(fn{k}).medium, data_circ.(fn{k}).dt, data_circ.(fn{k}).dx, data_circ.(fn{k}).dy] = lamb_simulate(data_circ.(fn{k}).input_param.thickness, data_circ.(fn{k}).input_param.velcoeff, data_circ.(fn{k}).model);
     disp('Simulation done');
@@ -55,14 +58,22 @@ for k=83:120 %numel(fn)
     disp('Saving done');
 end
 
-%%
-data_circ = load('data_circumferential.mat');
+%% Compute model stats
+fn = fieldnames(data_circ);
+for i=1:numel(fn)
+    disp(['Processing model stats on: ', num2str(i), ', Datasetname: ', data_circ.(fn{i}).input_param.datasetname])
+    data_circ.(fn{i}).model_stats = model_stats(data_circ.(fn{i}).medium);
+end
+
+
 %% Post processing
 fn = fieldnames(data_circ);
 for j=1:numel(fn)
     if( isfield(data_circ.(fn{j}), 'sensor_data') )
+        disp(['Processing done on simulation no: ', num2str(j), ', Datasetname: ', data_circ.(fn{j}).input_param.datasetname]);
         data_circ.(fn{j}).trace_ux_mean = mean(data_circ.(fn{j}).sensor_data.ux);
+        data_circ.(fn{j}).t_array = (1:length(data_circ.(fn{j}).trace_ux_mean))*data_circ.(fn{j}).dt;
         data_circ.(fn{j}).analysis_ux = trace_analyse(data_circ.(fn{j}).trace_ux_mean, data_circ.(fn{j}).dt);
-        disp(['Processing done on simulation no: ', num2str(j), ', Datasetname: ', data_circ.(fn{j}).input_param.datasetname]);       
+        
     end
 end
