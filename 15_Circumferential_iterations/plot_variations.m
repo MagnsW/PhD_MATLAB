@@ -1,4 +1,4 @@
-function plot_variations(reference_dataset, dataset1, dataset2, dataset3)
+function plot_variations(reference_dataset, dataset1, dataset2, dataset3, t_start)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -13,7 +13,8 @@ plot(dataset2.t_array, dataset2.trace_ux_mean);
 plot(dataset3.t_array, dataset3.trace_ux_mean);
 title('Signal')
 grid on; grid minor
-xlim([0 3.5]*1e-4);
+xlim([t_start 3.5]*1e-4);
+ylim([-1 1]*1e-7);
 
 
 subplot(2,2,2)
@@ -27,7 +28,8 @@ plot(dataset2.t_array, dataset2.analysis_ux.envelope);
 plot(dataset3.t_array, dataset3.analysis_ux.envelope);
 title('Envelope')
 grid on; grid minor;
-xlim([0 3.5]*1e-4);
+xlim([t_start 3.5]*1e-4);
+ylim([0 1]*1e-7);
 
 
 subplot(2,2,3)
@@ -48,7 +50,8 @@ grid on; grid minor
 
 
 title('Autocorrelation of signal')
-xlim([0 3.5]*1e-4);
+xlim([t_start 3.5]*1e-4);
+ylim([-4 4]*1e-11);
 
 
 subplot(2,2,4)
@@ -66,7 +69,8 @@ stem(dataset2.analysis_ux.env_autocorr.pks_locs_time, dataset2.analysis_ux.env_a
 stem(dataset3.analysis_ux.env_autocorr.pks_locs_time, dataset3.analysis_ux.env_autocorr.pks)
 title('Autocorrelation of envelopes')
 grid on; grid minor;
-xlim([0 3.5]*1e-4);
+xlim([t_start 3.5]*1e-4);
+ylim([0 8]*1e-11);
 
 leg = legend(convertCharsToStrings(reference_dataset.input_param.datasetname), dataset1.input_param.datasetname,...
     dataset2.input_param.datasetname, dataset3.input_param.datasetname);

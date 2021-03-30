@@ -36,7 +36,7 @@ end
 
 %% The simulation itself and saving
 fn = fieldnames(data_circ);
-for k=166:numel(fn)
+for k=380:numel(fn)
     disp([num2str(k) '-dataset name: ' data_circ.(fn{k}).input_param.datasetname]);
     [data_circ.(fn{k}).sensor_data, data_circ.(fn{k}).medium, data_circ.(fn{k}).dt, data_circ.(fn{k}).dx, data_circ.(fn{k}).dy] = lamb_simulate(data_circ.(fn{k}).input_param.thickness, data_circ.(fn{k}).input_param.velcoeff, data_circ.(fn{k}).model);
     disp('Simulation done');
@@ -77,3 +77,13 @@ for j=1:numel(fn)
         
     end
 end
+%% Aggregate features
+features_titles = {'MTMax', 'MTMin', 'MTDiff', 'MTMedian', 'MTMean', 'MTStd', 'MVelCoeff', 'EATDiff', 'EAARed', 'PhDMean', 'PAmpWin4', 'PFreqWin4', 'fwhmFreqRangeWin4'};
+features_titles = {'ModelThickMax', 'ModelThickMin', 'ModelThickDiff', 'ModelThickMedian', 'ModelThickMean', 'ModelThickStd', 'ModeVelCoeff', 'EnvelopeAvgTimeDiff', 'EnvelopeAvgAmpReduc', 'PhaseDiffMean', 'Win4_PeakAmp', 'Win4_PeakFreq', 'Win4_fwhmFreqRange'};
+features_array = zeros(length(fn), length(features_titles));
+for k=1:numel(fn)
+    [ModelThickMax, ModelThickMin, ModelThickDiff, ModelThickMedian, ModelThickMean, ModelThickStd, ModeVelCoeff, EnvelopeAvgTimeDiff, EnvelopeAvgAmpReduc, PhaseDiffMean, Win4_PeakAmp, Win4_PeakFreq, Win4_fwhmFreqRange] = get_summary(data_circ.(fn{k}));
+    features_array(k,:) = [ModelThickMax, ModelThickMin, ModelThickDiff, ModelThickMedian, ModelThickMean, ModelThickStd, ModeVelCoeff, EnvelopeAvgTimeDiff, EnvelopeAvgAmpReduc, PhaseDiffMean, Win4_PeakAmp, Win4_PeakFreq, Win4_fwhmFreqRange]; 
+end
+features_table = array2table(features_array,'VariableNames', features_titles);
+clear ModelThickMax ModelThickMin ModelThickDiff ModelThickMedian ModelThickMean ModelThickStd ModeVelCoeff EnvelopeAvgTimeDiff EnvelopeAvgAmpReduc PhaseDiffMean Win4_PeakAmp Win4_PeakFreq Win4_fwhmFreqRange;
