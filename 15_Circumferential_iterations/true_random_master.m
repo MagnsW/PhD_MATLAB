@@ -11,7 +11,7 @@ velcoeffs = randi([980 1020], 1000, 1);
 pitting_depths = randi([1 12], 1000,1);
 seeds = randi([3 99], 1000,1);
 
-for n=1:1000
+for n=783:1000
     fieldname = ['d' num2str(thicknesses(n), formatSpec) '_' num2str(pitting_depths(n), formatSpec) '_' num2str(seeds(n), formatSpec) '_' num2str(velcoeffs(n), formatSpecT)];
     data_circ_random.(fieldname).input_param.datasetname = (fieldname);
     data_circ_random.(fieldname).input_param.thickness = thicknesses(n);
@@ -23,8 +23,8 @@ for n=1:1000
 end
 
 %% The simulation itself and saving
-fn = fieldnames(data_circ_random);
-for k=467:numel(fn)
+fn = fieldnames(data_circ_random); 
+for k=1001:numel(fn)
     disp([num2str(k) '-dataset name: ' data_circ_random.(fn{k}).input_param.datasetname]);
     [data_circ_random.(fn{k}).sensor_data, data_circ_random.(fn{k}).medium, data_circ_random.(fn{k}).dt, data_circ_random.(fn{k}).dx, data_circ_random.(fn{k}).dy] = lamb_simulate(data_circ_random.(fn{k}).input_param.thickness, data_circ_random.(fn{k}).input_param.velcoeff, data_circ_random.(fn{k}).model);
     disp('Simulation done');
@@ -45,12 +45,17 @@ for k=467:numel(fn)
     end
     disp('Saving done');
 end
+%%
+data_circ_random = load('data_circumferential_random.mat');
+% data_circ_random_backup = load('X:\Magnus\PhD\Matlab_data\15_Circumferential_iterations\data_circumferential_random.mat');
 
 %% Compute model stats
 fn = fieldnames(data_circ_random);
 for i=1:numel(fn)
-    disp(['Processing model stats on: ', num2str(i), ', Datasetname: ', data_circ_random.(fn{i}).input_param.datasetname])
-    data_circ_random.(fn{i}).model_stats = model_stats(data_circ_random.(fn{i}).medium);
+    if( isfield(data_circ_random.(fn{i}), 'sensor_data') )
+        disp(['Processing model stats on: ', num2str(i), ', Datasetname: ', data_circ_random.(fn{i}).input_param.datasetname])
+        data_circ_random.(fn{i}).model_stats = model_stats(data_circ_random.(fn{i}).medium);
+    end
 end
 
 %% Post processing
@@ -68,8 +73,8 @@ end
 %% Aggregate features
 % features_titles = {'MTMax', 'MTMin', 'MTDiff', 'MTMedian', 'MTMean', 'MTStd', 'MVelCoeff', 'EATDiff', 'EAARed', 'PhDMean', 'PAmpWin4', 'PFreqWin4', 'fwhmFreqRangeWin4'};
 features_titles = {'ModelThickMax', 'ModelThickMin', 'ModelThickDiff', 'ModelThickMedian', 'ModelThickMean', 'ModelThickStd', 'ModeVelCoeff', 'EnvelopeAvgTimeDiff', 'EnvelopeAvgAmpReduc', 'PhaseDiffMean', 'Win4_PeakAmp', 'Win4_PeakFreq', 'Win4_fwhmFreqRange'};
-% features_array_random = zeros(length(fn), length(features_titles));
-features_array_random = zeros(520, length(features_titles));
+features_array_random = zeros(length(fn), length(features_titles));
+% features_array_random = zeros(782, length(features_titles));
 for k=1:numel(fn)
     if( isfield(data_circ_random.(fn{k}), 'sensor_data') )
         disp(['Processing done on simulation no: ', num2str(k), ', Datasetname: ', data_circ_random.(fn{k}).input_param.datasetname]);
@@ -79,3 +84,5 @@ for k=1:numel(fn)
 end
 features_table_random = array2table(features_array_random,'VariableNames', features_titles);
 clear ModelThickMax ModelThickMin ModelThickDiff ModelThickMedian ModelThickMean ModelThickStd ModeVelCoeff EnvelopeAvgTimeDiff EnvelopeAvgAmpReduc PhaseDiffMean Win4_PeakAmp Win4_PeakFreq Win4_fwhmFreqRange;
+%%
+disp(fn(1))
