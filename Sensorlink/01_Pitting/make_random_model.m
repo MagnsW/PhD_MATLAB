@@ -1,4 +1,4 @@
-function outputArg1 = make_random_model(x_size,y_size, maxdepth, numpits, fact, seed)
+function outputArg1 = make_random_model(x_size,y_size, maxdepth, pitlocations, fact, seed)
 %make_random_model will return a matrix with 1s and 0s. The 1s will
 %represent the model, the 0s will represent the background.
 %The lower edge will be randomized to mimick roughness and pitting.
@@ -35,14 +35,15 @@ for idx2 = x_size-1:-1:1
     end
 end
 
-pitlocations = randi([maxdepth y_size-maxdepth], numpits, 1);
-r(maxdepth, pitlocations) = 0;
+
+%pitlocations = randi([maxdepth+1 y_size-maxdepth], numpits, 1);
+r(maxdepth+1, pitlocations) = 0;
 for idy3 = 1:y_size
-    if r(maxdepth,idy3) == 0
-        r(maxdepth,idy3-randi([3 6]):idy3) = 0; 
+    if r(maxdepth+1,idy3) == 0
+        r(maxdepth+1,idy3-randi([3 6]):idy3) = 0; 
     end
 end
-for idx3 = maxdepth:-1:1
+for idx3 = maxdepth+1:-1:1
     for idy4 = 1:y_size
         if r(idx3+1, idy4) == 0
             r(idx3, idy4-randi([0 1]):idy4+randi([0 1])) = 0;
