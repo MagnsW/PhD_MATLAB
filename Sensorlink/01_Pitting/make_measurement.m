@@ -1,7 +1,7 @@
 function [measurement,settings] = make_measurement(input)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
-measurement.trace = squeeze(mean(input.sensor_data.p));
+measurement.trace = -30000*squeeze(mean(input.sensor_data.p));
 measurement.sampling_delay = 0;
 %measurement.nominal_thickness = input.model_stats.thickness.min*input.kgrid.dx*1000;
 measurement.nominal_thickness = 5;

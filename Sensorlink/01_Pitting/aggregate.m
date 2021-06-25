@@ -12,7 +12,16 @@ for i=1:numel(fn)
     output.results.thickness_comp(i) = inputs.(fn{i}).result.thickness_comp;
     
     output.sensor_data.trace(:,i) = squeeze(mean(inputs.(fn{i}).sensor_data.p));
-    output.sensor_data.trace_autocorr(:,i) = xcorr(output.sensor_data.trace(:,i));
+    temp = xcorr(output.sensor_data.trace(:,i));
+    output.sensor_data.trace_autocorr(:,i) = temp(floor(length(temp)/2:end));
     output.sensor_data.trace_hilbert(:,i) = abs(hilbert(output.sensor_data.trace(:,i)));
+    temp2 = xcorr(output.sensor_data.trace_hilbert(:,i));
+    output.sensor_data.trace_autocorr_hilbert(:,i) = temp2(floor(length(temp2)/2:end));
+    
+%     [output.analysis.peaks.trace.pks(:,i), output.analysis.peaks.trace.locs(:,i)] = findpeaks(output.sensor_data.trace(:,i));
+%     [output.analysis.peaks.trace_autocorr.pks(:,i), output.analysis.peaks.trace_autocorr.locs(:,i)] = findpeaks(output.sensor_data.trace_autocorr(:,i));
+%     [output.analysis.peaks.trace_hilbert.pks(:,i), output.analysis.peaks.trace_hilbert.locs(:,i)] = findpeaks(output.sensor_data.trace_hilbert(:,i));
+%     [output.analysis.peaks.trace_autocorr_hilbert.pks(:,i), output.analysis.peaks.trace_autocorr_hilbert.locs(:,i)] = findpeaks(output.sensor_data.trace_autocorr_hilbert(:,i));
+    
 end
 end
